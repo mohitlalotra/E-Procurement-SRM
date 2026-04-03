@@ -127,16 +127,18 @@ function LoginPage({ onLogin }) {
     setLoading(true);
     
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/auth/${isRegistering ? 'register' : 'login'}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(
-            isRegistering ? { email, password, name, company } : { email, password }
-          ),
-        }
-      );
+     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+const response = await fetch(
+  `${API_URL}/api/auth/${isRegistering ? 'register' : 'login'}`,
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(
+      isRegistering ? { email, password, name, company } : { email, password }
+    ),
+  }
+);
       
       const data = await response.json();
       
