@@ -127,7 +127,7 @@ function LoginPage({ onLogin }) {
     setLoading(true);
     
     try {
-     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+     const API_URL = process.env.REACT_APP_API_URL || 'https://srm-backend.onrender.com';
 
 const response = await fetch(
   `${API_URL}/api/auth/${isRegistering ? 'register' : 'login'}`,
