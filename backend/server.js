@@ -8,9 +8,9 @@ dotenv.config();
 
 const app = express();
 
-// 2. Updated CORS to be more flexible for Vercel
+// 2. Flexible CORS for Deployment
 app.use(cors({
-  origin: "*", // Allows your frontend to talk to this backend
+  origin: "*", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -23,13 +23,12 @@ const supplierRoutes = require('./suppliers');
 const procurementRoutes = require('./procurements');
 const knowledgeRoutes = require('./knowledge');
 
-// 3. FIX: Use process.env.MONGO_URI for the cloud database
-// It will use Atlas on Vercel and your local DB on your laptop
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/srm_database';
+// 3. Connect to MongoDB
+const dbURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/srm_database';
 
-mongoose.connect(mongoURI)
+mongoose.connect(dbURI)
   .then(() => console.log('✅ MongoDB Connected Successfully'))
-  .catch(err => console.log('❌ MongoDB Error:', err));
+  .catch(err => console.log('❌ MongoDB Connection Error:', err));
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -37,13 +36,14 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/procurements', procurementRoutes);
 app.use('/api/knowledge', knowledgeRoutes);
 
-// Root endpoint (Test this in your browser)
+// Root endpoint
 app.get('/', (req, res) => {
   res.json({ message: 'SRM System API is running!' });
 });
 
-// 4. FIX: Vercel assigns a random PORT, so process.env.PORT is required
+// 4. Set the Port (Required for Render)
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
